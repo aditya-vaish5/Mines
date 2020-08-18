@@ -1,15 +1,15 @@
 import React from 'react'
-import { Link, withRouter, NavLink } from 'react-router-dom'
+import {  withRouter, NavLink } from 'react-router-dom'
 
 const NavBar = (props) => {
     return (
         <nav className="nav-wrapper blue darken-3">
             <div className="container">
-                <a className="brand-logo left">
-                    <NavLink to="/">
+                <div className="brand-logo left">
+                    {/* <NavLink to="/"> */}
                         Minesweeper
-                </NavLink>
-                </a>
+                {/* </NavLink> */}
+                </div>
                 <ul className="right">
                     <li><NavLink to="/">Home</NavLink></li>
                     <li><NavLink to="/rules">Rules</NavLink></li>

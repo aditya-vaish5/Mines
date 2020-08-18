@@ -71,6 +71,7 @@ const mapStateToProps = (state) => {
     //     width: state.width,
     //     minesNo: state.minesNumber
     // }
+    return {}
 }
 
 const mapDispatchToProps = (dispatch) => {

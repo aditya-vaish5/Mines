@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import { updateClick } from '../actions/updateActions'
 
 class Game extends Component {
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return !shallowEqual(this.state.props, nextState.props);
+    // }
     toSTR = (activities) => {
         let res = "";
         for (let i = 0; i < activities.length; i++) {
@@ -19,13 +22,14 @@ class Game extends Component {
     }
 
     block = (mat, stat, row_no, col_no) => {
+        if (row_no >= this.props.height || col_no >= this.props.width) return
         if (stat === 0) {
-            return <div className="col s0.5" onClick={() => this.props.updateOnClick(row_no,col_no)}>A</div>
+            return <div className="card-panel blue blue-text text-darken-3 col s0" onClick={() => this.props.updateOnClick(row_no, col_no)}> . </div>
         } else if (stat === 2) {
-            return <div className="col s0.5">Flag</div>
+            return <div className="card-panel col s0">Flag</div>
         } else {
-            if (mat === -1) return <div className="col s0.5">Mine</div>
-            else return <div className="col s0.5">{mat}</div>
+            if (mat === -1) return <div className="card-panel col s0">Mine</div>
+            else return <div className="card-panel col s0">{mat}</div>
         }
 
     }
@@ -51,8 +55,10 @@ class Game extends Component {
         return (
             <div className="container" >
                 <h4 className="center">Game</h4>
-                <div className="col ">
-                    {this.table(this.props.matrix, this.props.status)}
+                <div className="center">
+                    <div className="col ">
+                        {this.table(this.props.matrix, this.props.status)}
+                    </div>
                 </div>
                 <div className="row">
                     <div className="col s2">
@@ -80,6 +86,7 @@ const mapStateToProps = (state) => {
         minesNumber: state.minesNumber,
         matrix: state.matrix,
         status: state.status,
+        clickCnt: state.count,
     }
 }
 
