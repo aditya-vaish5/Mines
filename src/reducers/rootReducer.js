@@ -130,7 +130,7 @@ const rootReducer = (state = initState, action) => {
             ...state,
             matrix: curr_mat,
             status: curr_stat,
-            
+            count: state.count+1,
         }
     }
 
