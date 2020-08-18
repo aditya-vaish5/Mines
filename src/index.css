@@ -23,10 +23,40 @@ code {
   padding:12 !important;
   margin-bottom: 0 !important;
   margin-top: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  /* margin-left: 0 !important; */
+  /* margin-right: 0 !important; */
 }
 
 .container {
   width: 90%;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px ;
+  grid-gap: 0px;
+  background-color: white;
+  color: #444;
+  margin-bottom: 2px;
+}
+
+.box {
+  background-color: rgb(98, 108, 250);
+  color: #fff;
+  border-radius: 2px;
+  padding: 10px;
+  margin-left: 2px;
+  font-size: 100%;
+}
+
+.open{
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  border-color: black;
+}
+.mine{
+  background-color: red;
+  border-radius: 5px;
+  border-color: black;
 }

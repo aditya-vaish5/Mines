@@ -4,7 +4,7 @@ const About = () => {
     return (
         <div className="container">
             <h4 className="center">About</h4>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam accusamus quos ratione eum, in eos, voluptatem consequuntur unde laudantium excepturi natus. Laborum cum ipsa vero cumque ut quibusdam deleniti consectetur.</p>
+            <p>Obviously made with love while learning React.js, Go ahead Enjoy by going to HOME page</p>
         </div>
     )
 }

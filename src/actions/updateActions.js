@@ -17,3 +17,11 @@ export const updateClick = (row_no, col_no) => {
         }
     }
 }
+export const invertFlag = (curr_flag) => {
+    return {
+        type: 'INVERT_FLAG',
+        val: {
+            curr_flag : curr_flag,
+        }
+    }
+}

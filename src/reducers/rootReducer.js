@@ -5,7 +5,9 @@ const initState = {
     matrix: startState(),
     status: new Array(10).fill(0).map(() => new Array(10).fill(0)),
     minesLocation: [],
-    count:0,
+    count: 0,
+    flagOn: 0,
+    winStatus: 0,
 }
 function startState() {
     let new_matrix = [];
@@ -45,21 +47,38 @@ function startState() {
 
     return (new_matrix);
 }
-function openPressed(curr_mat, curr_stat, row_no, col_no) {
+function openPressed(curr_mat, curr_stat, row_no, col_no, h, w) {
     if (curr_stat[row_no][col_no] === 2) return;
     if (curr_stat[row_no][col_no] === 1) return;
     curr_stat[row_no][col_no] = 1;
-    if (curr_mat[row_no][col_no] == 0) {
+    if (curr_mat[row_no][col_no] === 0) {
         let i = row_no, j = col_no;
-        if (i + 1 < 10) openPressed(curr_mat, curr_stat, i + 1, j);
-        if (i + 1 < 10 && j - 1 >= 0) openPressed(curr_mat, curr_stat, i + 1, j - 1);
-        if (i + 1 < 10 && j + 1 < 10) openPressed(curr_mat, curr_stat, i + 1, j + 1);
-        if (j + 1 < 10) openPressed(curr_mat, curr_stat, i, j + 1);
-        if (j - 1 >= 0) openPressed(curr_mat, curr_stat, i, j - 1);
-        if (i - 1 >= 0) openPressed(curr_mat, curr_stat, i - 1, j);
-        if (i - 1 >= 0 && j - 1 >= 0) openPressed(curr_mat, curr_stat, i - 1, j - 1);
-        if (i - 1 >= 0 && j + 1 < 10) openPressed(curr_mat, curr_stat, i - 1, j + 1);
+        if (i + 1 < h) openPressed(curr_mat, curr_stat, i + 1, j, h, w);
+        if (i + 1 < h && j - 1 >= 0) openPressed(curr_mat, curr_stat, i + 1, j - 1, h, w);
+        if (i + 1 < h && j + 1 < w) openPressed(curr_mat, curr_stat, i + 1, j + 1, h, w);
+        if (j + 1 < w) openPressed(curr_mat, curr_stat, i, j + 1, h, w);
+        if (j - 1 >= 0) openPressed(curr_mat, curr_stat, i, j - 1, h, w);
+        if (i - 1 >= 0) openPressed(curr_mat, curr_stat, i - 1, j, h, w);
+        if (i - 1 >= 0 && j - 1 >= 0) openPressed(curr_mat, curr_stat, i - 1, j - 1, h, w);
+        if (i - 1 >= 0 && j + 1 < w) openPressed(curr_mat, curr_stat, i - 1, j + 1, h, w);
     }
+}
+function hasWon(curr_mat, curr_stat, h, w) {
+    for(let i=0;i<h;i++){
+        for(let j=0;j<w;j++){
+            if(curr_mat[i][j] !== -1 && curr_stat[i][j] === 0) return false;
+        }
+    }
+   
+    return true;
+}
+function allOne(curr_stat, h, w) {
+    for(let i=0;i<h;i++){
+        for(let j=0;j<w;j++){
+            curr_stat[i][j] =1;
+        }
+    }
+    return curr_stat;
 }
 const rootReducer = (state = initState, action) => {
     // console.log(action);
@@ -119,18 +138,59 @@ const rootReducer = (state = initState, action) => {
             matrix: new_matrix,
             minesLocation: new_mines,
             status: new_status,
+            count: 0,
+            flagOn: 0,
+            winStatus: 0,
         }
     } else if (action.type === 'UPDATE_CLICK') {
         console.table(action.val)
         var curr_mat = state.matrix;
         var curr_stat = state.status;
-        openPressed(curr_mat, curr_stat, action.val.row_no, action.val.col_no)
-        console.table(curr_stat)
+
+        if (state.flagOn === 0) {
+            if(curr_mat[action.val.row_no][action.val.col_no] == -1) {
+                console.log("change win status to 0")
+                return{
+                    ...state,
+                    status: allOne(curr_stat,state.height,state.width),
+                    count: state.count + 1,
+                    winStatus: -1,
+                }
+            }
+            openPressed(curr_mat, curr_stat, action.val.row_no, action.val.col_no, state.height, state.width)
+            let curr_winStatus = state.winStatus
+            
+            if(hasWon(curr_mat,curr_stat,state.height,state.width)){
+                console.log("win_status changed to 1")
+                curr_stat = allOne(curr_stat,state.height,state.width);
+                curr_winStatus = 1;
+            }
+            console.table(curr_stat)
+            return {
+                ...state,
+                status: curr_stat,
+                count: state.count + 1,
+                winStatus: curr_winStatus,
+            }
+        } else {
+            if (curr_stat[action.val.row_no][action.val.col_no] === 0) {
+                curr_stat[action.val.row_no][action.val.col_no] = 2;
+            } else if (curr_stat[action.val.row_no][action.val.col_no] === 2) {
+                curr_stat[action.val.row_no][action.val.col_no] = 0;
+            }
+            return {
+                ...state,
+                status: curr_stat,
+                count: state.count + 1,
+            }
+        }
+    } else if (action.type === 'INVERT_FLAG') {
+        // console.table(action);
+        let new_flag = (action.val.curr_flag === 0) ? 1 : 0;
+        // console.table(new_flag)
         return {
             ...state,
-            matrix: curr_mat,
-            status: curr_stat,
-            count: state.count+1,
+            flagOn: new_flag,
         }
     }
 

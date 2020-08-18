@@ -33,7 +33,7 @@ class Home extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.updateConfigAndInit(this.state.height, this.state.width, this.state.minesNo)
-        this.props.history.push('/game')
+        this.props.history.push('/mines/game')
     }
 
     render() {

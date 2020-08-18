@@ -11,10 +11,10 @@ const NavBar = (props) => {
                 {/* </NavLink> */}
                 </div>
                 <ul className="right">
-                    <li><NavLink to="/">Home</NavLink></li>
-                    <li><NavLink to="/rules">Rules</NavLink></li>
-                    <li><NavLink to="/game">Game</NavLink></li>
-                    <li><NavLink to="/about">About</NavLink></li>
+                    <li><NavLink to="/mines">Home</NavLink></li>
+                    <li><NavLink to="/mines/rules">Rules</NavLink></li>
+                    <li><NavLink to="/mines/game">Game</NavLink></li>
+                    <li><NavLink to="/mines/about">About</NavLink></li>
                 </ul>
             </div>
         </nav>

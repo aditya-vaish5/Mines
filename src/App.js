@@ -12,10 +12,10 @@ class App extends Component {
         <div className="App">
           <NavBar />
           <Switch>
-            <Route exact path='/' component={Home} />
-            <Route path='/about' component={About} />
-            <Route path='/game' component={Game} />
-            <Route path='/rules' component={Rules} />
+            <Route exact path='/mines' component={Home} />
+            <Route path='/mines/about' component={About} />
+            <Route path='/mines/game' component={Game} />
+            <Route path='/mines/rules' component={Rules} />
           </Switch>
         </div>
       </BrowserRouter>

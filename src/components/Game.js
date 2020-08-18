@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { updateClick } from '../actions/updateActions'
+import { updateClick, invertFlag } from '../actions/updateActions'
+
 
 class Game extends Component {
     // shouldComponentUpdate(nextProps, nextState) {
@@ -22,14 +23,16 @@ class Game extends Component {
     }
 
     block = (mat, stat, row_no, col_no) => {
-        if (row_no >= this.props.height || col_no >= this.props.width) return
+        // if (row_no >= this.props.height || col_no >= this.props.width) return;
         if (stat === 0) {
-            return <div className="card-panel blue blue-text text-darken-3 col s0" onClick={() => this.props.updateOnClick(row_no, col_no)}> . </div>
+            return <div className="box closed" onClick={() => this.props.updateOnClick(row_no, col_no)}>
+                .
+            </div>
         } else if (stat === 2) {
-            return <div className="card-panel col s0">Flag</div>
+            return <div className="box closed flag" onClick={() => this.props.updateOnClick(row_no, col_no)}><i className="tiny material-icons  light-green-text text-accent-3" >flag</i></div>
         } else {
-            if (mat === -1) return <div className="card-panel col s0">Mine</div>
-            else return <div className="card-panel col s0">{mat}</div>
+            if (mat === -1) return <div className="box mine"><i className="tiny material-icons" >wb_sunny</i></div>
+            else return <div className="box open">{mat !== 0 ? mat : "."}</div>
         }
 
     }
@@ -43,7 +46,7 @@ class Game extends Component {
     table = (matrix, status) => {
         let ans = [];
         for (let i = 0; i < matrix.length; i++) {
-            ans.push(<div className="row custom-row">{this.row(matrix[i], status[i], i)}</div>);
+            ans.push(<div className="wrapper">{this.row(matrix[i], status[i], i)}</div>);
         }
 
         // console.table(ans);
@@ -51,10 +54,19 @@ class Game extends Component {
     }
 
     render() {
-        // console.log(this.props)
+        console.log(this.props)
+        let headMessage = (<></>);
+        if (this.props.winStatus === 0) {
+            headMessage = (<h4 className="center">Game</h4>)
+        } else if (this.props.winStatus === 1) {
+            headMessage = (<h4 className="center green-text">Game Won!</h4>)
+        } else {
+            headMessage = (<h4 className="center red-text">Game Over, You Lose!</h4>)
+        }
+
         return (
             <div className="container" >
-                <h4 className="center">Game</h4>
+                {headMessage}
                 <div className="center">
                     <div className="col ">
                         {this.table(this.props.matrix, this.props.status)}
@@ -70,11 +82,19 @@ class Game extends Component {
                     <div className="col s2">
                         <p>Mines Number  : {this.props.minesNumber}</p>
                     </div>
-                    <div className="col">
+                    {/* <div className="col">
                         <p>Matrix  : {this.toSTR(this.props.matrix)}</p>
-                    </div>
-                </div>
+                    </div> */}
 
+                </div><div className="fixed-action-btn">
+                    <a class="btn-floating btn-large red">
+                        {
+                            (this.props.flagOn === 1) ?
+                                (<i class="large material-icons red-text white" onClick={() => this.props.invertFlag(this.props.flagOn)}>flag</i>) :
+                                (<i class="large material-icons blue" onClick={() => this.props.invertFlag(this.props.flagOn)}>flag</i>)
+                        }
+                    </a>
+                </div>
             </div>
         )
     }
@@ -87,6 +107,8 @@ const mapStateToProps = (state) => {
         matrix: state.matrix,
         status: state.status,
         clickCnt: state.count,
+        flagOn: state.flagOn,
+        winStatus: state.winStatus,
     }
 }
 
@@ -95,6 +117,9 @@ const mapDispatchToProps = (dispatch) => {
         updateOnClick: (row_no, col_no) => {
             // console.log("Clicked " + row_no + col_no);
             dispatch(updateClick(row_no, col_no))
+        },
+        invertFlag: (curr_flag) => {
+            dispatch(invertFlag(curr_flag))
         }
     }
 }
